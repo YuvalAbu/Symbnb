@@ -1,0 +1,40 @@
+version: '3'
+networks: 
+  private:
+  web:
+    external:
+      name: web
+
+services:
+  mariadb-symbnb:
+    image: mariadb:10.4.12
+    container_name: mariadb
+    networks: 
+      - private
+    volumes:
+      - ./docker/mariadb/:/var/lib/mysql
+    environment: 
+      MYSQL_ROOT_PASSWORD: root
+
+  adminer:
+    image: adminer:4.7.5
+    container_name: adminer
+    ports: 
+      - 5050:8080
+    networks: 
+      - web
+      - private
+
+  symbnb:
+    build: .
+    container_name: symbnb
+    volumes: 
+      - ./:/var/www/symbnb/
+    depends_on:
+      - mariadb-symbnb
+      - adminer
+    networks:
+      - web
+      - private
+    ports: 
+      - 8080:80
