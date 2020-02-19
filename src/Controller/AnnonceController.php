@@ -6,10 +6,12 @@ use App\Entity\Annonce;
 use App\Form\AnnonceType;
 use App\Repository\AnnonceRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 
 class AnnonceController extends AbstractController
 {
@@ -33,6 +35,7 @@ class AnnonceController extends AbstractController
      * Create one Annonce
      * 
      * @Route("/annonces/new", name="annonces_create")
+     * @IsGranted("ROLE_USER")
      * 
      * @return Response
      */
@@ -77,6 +80,7 @@ class AnnonceController extends AbstractController
      * Edit an Annonce
      * 
      * @Route("/annonces/{slug}/edit", name="annonces_edit")
+     * @Security("is_granted('ROLE_USER') and user === annonce.getAuthor()", message="Cette annonce ne vous appartiens pas, vous ne pouvez pas la modifier !")
      * 
      * @return Response
      */
@@ -125,6 +129,28 @@ class AnnonceController extends AbstractController
         return $this->render('annonce/show.html.twig', [
             'annonce' => $annonce
         ]);
+    }
+
+    /**
+     * Display one Annonce
+     * 
+     * @Route("/annonces/{slug}/delete", name="annonces_delete")
+     * @Security("is_granted('ROLE_USER') and user === annonce.getAuthor()", message="Vous n'avez pas le dorit d'accéder à cette ressources !")
+     * 
+     * @return Response
+     */
+    public function delete(Annonce $annonce, EntityManagerInterface $manager)
+    {
+
+        $manager->remove($annonce);
+        $manager->flush();
+
+        $this->addFlash(
+            'success',
+            "L'annonce <strong>{$annonce->getTitle()}</strong> a bien été supprimée !"
+        );
+
+        return $this->redirectToRoute("annonces_index");
     }
 }
  

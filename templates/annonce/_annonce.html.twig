@@ -19,6 +19,9 @@
                 {{ annonce.intro }}
             </p>
             <a href="{{url}}" class="btn btn-secondary">En savoir plus</a>
+            {% if app.user and app.user == annonce.author %}
+                <a href="{{ path('annonces_edit', {'slug': annonce.slug}) }}" class="btn btn-secondary">Modifier l'annonce</a>
+            {% endif %}
         </div>
     </div>
 </div>
