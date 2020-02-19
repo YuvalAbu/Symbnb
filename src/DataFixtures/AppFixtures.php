@@ -5,15 +5,50 @@ namespace App\DataFixtures;
 use App\Entity\Annonce;
 use Faker\Factory;
 use App\Entity\Image;
+use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class AppFixtures extends Fixture
 {
+
+    private $encoder;
+
+    public function __construct(UserPasswordEncoderInterface $encoder)
+    {
+        $this->encoder= $encoder;
+    }
+
     public function load(ObjectManager $manager)
     {
         $faker = Factory::create('FR-fr');
 
+        // Nous gérons les utilisateurs
+        $users = [];
+
+        for ($i=0; $i <=10 ; $i++) { 
+            $user = new User();
+
+            $picture = 'https://randomuser.me/api/portraits/lego/';
+            $pictureId = $faker->numberBetween(0, 9) . '.jpg';
+            $picture .= $pictureId;
+
+            $hash = $this->encoder->encodePassword($user, 'password');
+
+            $user->setFirstName($faker->firstName())
+                 ->setLastName($faker->lastName())
+                 ->setEmail($faker->email)
+                 ->setIntro($faker->sentence())
+                 ->setDescription('<p>' . join('</p><p>', $faker->paragraphs(3)) . '</p>')
+                 ->setHash($hash)
+                 ->setPicture($picture);
+            
+            $manager->persist($user);
+            $users[] = $user;
+        }
+
+        // Nous gérons les annonces
         for ($i=1; $i <= 30 ; $i++) {             
             $annonce = new Annonce();
 
@@ -24,12 +59,15 @@ class AppFixtures extends Fixture
             $title = $faker->sentence();
             $content = '<p>' . join('</p><p>', $faker->paragraphs(5)) . '</p>';
 
+            $user = $users[mt_rand(0, count($users) -1)];
+
             $annonce->setTitle($title)
                 ->setCoverImage('https://picsum.photos/id/'.$randIdImage.'/1000/350')
                 ->setIntro($faker->paragraph(2))
                 ->setContent($content)
                 ->setPrice(mt_rand(40, 200))
-                ->setRooms(mt_rand(1, 5));
+                ->setRooms(mt_rand(1, 5))
+                ->setAuthor($user);
 
             for ($j=1; $j <= mt_rand(2,5) ; $j++) { 
                 $image = new Image();

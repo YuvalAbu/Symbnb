@@ -1,6 +1,6 @@
 // Jquery, hide slowly the alert message
 $(document).ready(function() {
-    $(".alert").fadeTo(2000, 800).slideUp(800, function(){
-        $(".alert").slideUp(800);
+    $("#closeAlert").fadeTo(2000, 1000).slideUp(1000, function(){
+        $("#closeAlert").slideUp(1000);
     });
 });
