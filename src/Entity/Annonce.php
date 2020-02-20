@@ -89,9 +89,15 @@ class Annonce
      */
     private $author;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Booking", mappedBy="annonce")
+     */
+    private $bookings;
+
     public function __construct()
     {
         $this->images = new ArrayCollection();
+        $this->bookings = new ArrayCollection();
     }
 
     /**
@@ -107,6 +113,34 @@ class Annonce
             $slugify = new Slugify();
             $this->slug = $slugify->slugify($this->title);
         }
+    }
+
+    /**
+     * Allows to obtain a table of the days that are not available for this annonce
+     *
+     * @return array
+     */
+    public function getNotAvailableDays(): array
+    {
+        $notAvailableDays = [];
+
+        foreach ($this->bookings as $booking) {
+            // Calcule des jours qui se trouve entre les dates d'arrivée et de départ
+            $resultat = range(
+                $booking->getStartDate()->getTimestamp(),
+                $booking->getEndDate()->getTimestamp(),
+                24  * 60 * 60
+            );
+
+            // Convertie le Timestamp en date Année mois jours
+            $days = array_map(function($dayTimestamp){
+                return new \DateTime(date('Y-m-d', $dayTimestamp));
+            }, $resultat);
+            
+            $notAvailableDays = array_merge($notAvailableDays, $days);
+        }
+
+        return $notAvailableDays;
     }
 
     public function getId(): ?int
@@ -237,6 +271,37 @@ class Annonce
     public function setAuthor(?User $author): self
     {
         $this->author = $author;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Booking[]
+     */
+    public function getBookings(): Collection
+    {
+        return $this->bookings;
+    }
+
+    public function addBooking(Booking $booking): self
+    {
+        if (!$this->bookings->contains($booking)) {
+            $this->bookings[] = $booking;
+            $booking->setAnnonce($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBooking(Booking $booking): self
+    {
+        if ($this->bookings->contains($booking)) {
+            $this->bookings->removeElement($booking);
+            // set the owning side to null (unless already changed)
+            if ($booking->getAnnonce() === $this) {
+                $booking->setAnnonce(null);
+            }
+        }
 
         return $this;
     }

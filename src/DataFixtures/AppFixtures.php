@@ -2,11 +2,12 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Annonce;
 use Faker\Factory;
-use App\Entity\Image;
 use App\Entity\Role;
 use App\Entity\User;
+use App\Entity\Image;
+use App\Entity\Annonce;
+use App\Entity\Booking;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -96,6 +97,31 @@ class AppFixtures extends Fixture
                       ->setAnnonce($annonce);
 
                 $manager->persist($image);
+            }
+
+            //Gestion des réservations
+
+            for ($k=0; $k <= mt_rand(0,10); $k++) { 
+                $booking = new Booking();
+
+                $createdAt = $faker->dateTimeBetween('-6 months');
+                $startDate = $faker->dateTimeBetween('-3 months');
+                $duration = mt_rand(3, 10);
+                $endDate = (clone $startDate)->modify("+$duration days");
+                
+                $amount = $annonce->getPrice() * $duration;
+                $booker = $users[mt_rand(0, count($users) -1)];
+
+                $booking->setBooker($booker)
+                        ->setAnnonce($annonce)
+                        ->setStartDate($startDate)
+                        ->setEndDate($endDate)
+                        ->setCreatedAt($createdAt)
+                        ->setAmount($amount)
+                        ->setComment($faker->paragraph());
+
+                $manager->persist($booking);
+
             }
 
             $manager->persist($annonce);
