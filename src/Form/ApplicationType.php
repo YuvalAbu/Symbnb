@@ -15,7 +15,8 @@ class ApplicationType extends AbstractType {
      * @return array
      */
     protected function getConfiguration($label, $placeholder, $options = []){
-        return array_merge([
+        // le récursive permet de ne pas ecrasé une valeur si elle est déja utilisé (par exemple dans le tableau option avoir un autre attr)
+        return array_merge_recursive([
             'label' => $label,
             'attr' => [
                 'placeholder' => $placeholder

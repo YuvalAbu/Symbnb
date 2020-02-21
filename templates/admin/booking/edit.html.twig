@@ -1,0 +1,58 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Modification de la réservation de {{booking.booker.fullName}}{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1 class="my-5">Modification de la réservation de {{booking.booker.fullName}}</h1>
+        
+        {{form_start(form)}}
+
+        <div class="row">
+            <div class="col">
+                {{form_row(form.startDate)}}
+                {{form_row(form.endDate)}}
+                {{form_row(form.comment)}}
+            </div>
+            <div class="col">
+                {{form_row(form.booker)}}
+                {{form_row(form.annonce)}}
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-check"></i>
+                    Enregistrer les modifications
+                </button>
+            </div>
+        </div> 
+        {{form_end(form)}}
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{asset('/js/datepicker.min.js')}}"></script>
+
+    <script>
+        $(document).ready(function(){
+
+            $('#admin_booking_startDate, #admin_booking_endDate').datepicker({
+            format: 'dd/mm/yyyy',
+            datesDisabled: calculateNewDisabledDate()
+            });
+
+            $('#admin_booking_annonce').change(function(){
+                console.log(calculateNewDisabledDate())
+            });
+
+        });
+
+        function calculateNewDisabledDate(){
+            {% set array = []  %}
+            {% for day in booking.annonce.notAvailableDays %}
+                {% set array = array|merge([day.format('d/m/Y')]) %}
+            {% endfor %}
+            //return "{{booking.annonce.title}}"
+            return {{ array|json_encode()|raw }}
+        }
+
+    </script>
+{% endblock %}
