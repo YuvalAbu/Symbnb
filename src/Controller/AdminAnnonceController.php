@@ -4,21 +4,26 @@ namespace App\Controller;
 
 use App\Entity\Annonce;
 use App\Form\AnnonceType;
+use App\Service\Pagination;
 use App\Repository\AnnonceRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class AdminAnnonceController extends AbstractController
 {
     /**
-     * @Route("/admin/annonces", name="admin_annonces_index")
+     * @Route("/admin/annonces/{page}", name="admin_annonces_index", requirements={"page": "\d+"})
      */
-    public function index(AnnonceRepository $repo)
+    public function index(AnnonceRepository $repo, $page = 1, Pagination $pagination)
     {
+        $pagination->setEntityClass(Annonce::class)
+                    ->setCurrentPage($page);
+
         return $this->render('admin/annonce/index.html.twig', [
-            'annonces' => $repo->findAll()
+            'pagination' => $pagination
+
         ]);
     }
 
