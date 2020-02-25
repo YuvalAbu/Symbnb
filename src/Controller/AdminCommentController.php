@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Comment;
-use App\Service\Pagination;
+use App\Service\PaginationService;
 use App\Form\AdminCommentType;
 use App\Repository\CommentRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -16,7 +16,7 @@ class AdminCommentController extends AbstractController
     /**
      * @Route("/admin/comments/{page}", name="admin_comments_index", requirements={"page": "\d+"})
      */
-    public function index(CommentRepository $repo, $page = 1, Pagination $pagination)
+    public function index(CommentRepository $repo, $page = 1, PaginationService $pagination)
     {
         $pagination->setEntityClass(Comment::class)
                     ->setCurrentPage($page);

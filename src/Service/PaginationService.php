@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
  * 
  * Elle nécessite après instanciation qu'on lui passe l'entité sur laquelle on souhaite travailler
  */
-class Pagination {
+class PaginationService {
     /**
      * Le nom de l'entité sur laquelle on veut effectuer une pagination
      *

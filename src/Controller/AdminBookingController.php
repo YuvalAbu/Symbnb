@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Entity\Booking;
 use App\Form\AdminBookingType;
 use App\Repository\BookingRepository;
-use App\Service\Pagination;
+use App\Service\PaginationService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -16,7 +16,7 @@ class AdminBookingController extends AbstractController
     /**
      * @Route("/admin/bookings/{page}", name="admin_bookings_index", requirements={"page": "\d+"})
      */
-    public function index(BookingRepository $repo, $page = 1, Pagination $pagination)
+    public function index(BookingRepository $repo, $page = 1, PaginationService $pagination)
     {
 
         $pagination->setEntityClass(Booking::class)

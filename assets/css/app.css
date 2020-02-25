@@ -1,4 +1,7 @@
-div.container {
+@import url('./bootstrap.min.css');
+@import url('./datepicker.min.css');
+
+div.container, div.container-fluid{
     margin-top: 20px;
 }
 div.annonce-title {

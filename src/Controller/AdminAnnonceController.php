@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Annonce;
 use App\Form\AnnonceType;
-use App\Service\Pagination;
+use App\Service\PaginationService;
 use App\Repository\AnnonceRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,7 +16,7 @@ class AdminAnnonceController extends AbstractController
     /**
      * @Route("/admin/annonces/{page}", name="admin_annonces_index", requirements={"page": "\d+"})
      */
-    public function index(AnnonceRepository $repo, $page = 1, Pagination $pagination)
+    public function index(AnnonceRepository $repo, $page = 1, PaginationService $pagination)
     {
         $pagination->setEntityClass(Annonce::class)
                     ->setCurrentPage($page);

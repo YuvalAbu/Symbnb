@@ -1,3 +1,5 @@
+var $ = require('jquery');
+
 // au click sur le button
 $('#add-image').click(function () {
     // Je récupère le nombre d'entrée que je vais créer

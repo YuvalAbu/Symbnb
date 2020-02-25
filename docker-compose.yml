@@ -28,6 +28,8 @@ services:
   symbnb:
     build: .
     container_name: symbnb
+    command: > 
+      bash -c "composer install && docker-php-entrypoint apache2-foreground" 
     volumes: 
       - ./:/var/www/symbnb/
     depends_on:

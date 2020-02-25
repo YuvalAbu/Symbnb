@@ -5,8 +5,7 @@
         <title>SymBnB - {% block title %}{% endblock %}</title>
 
         <meta name="viewport" content="width=device-width, user-scalable=no">
-        <link rel="stylesheet" type="text/css" href="{{asset('/css/bootstrap.min.css')}}">
-        <link rel="stylesheet" type="text/css" href="{{asset('/css/app.css')}}">
+        {{ encore_entry_link_tags('app') }}
         {% block stylesheets %}{% endblock %}
     </head>
     <body>
@@ -15,11 +14,7 @@
 
         {% block body %}{% endblock %}
 
-        <script src="{{asset('/js/jquery.min.js')}}"></script>
-        <script src="{{asset('/js/popper.min.js')}}"></script>
-        <script src="{{asset('/js/bootstrap.min.js')}}"></script>
-        <script src="{{asset('/js/script.js')}}"></script> 
-        <script src="{{asset('/js/fontAwesome.js')}}"></script> 
+        {{ encore_entry_script_tags('script') }}
         {% block javascripts %}{% endblock %}
     </body>
     {% include "admin/partials/footer.html.twig" %}

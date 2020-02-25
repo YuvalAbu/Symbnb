@@ -16,95 +16,27 @@
 
     <h2 class="h1 my-5">Nos appartements stars</h2>
     <div class="row">
-        <div class="col-md-4">
-            <div class="card bg-light mb-3">
-                <div class="card-header text-center">
-                    3 chambres, <strong>49€ / nuit</strong> <br>
-                    <small>Pas encore noté</small>
-                </div>
-
-                <img src="http://placehold.it/1000x400" alt="Img de l'appart" style="height: 200px; width: 100%; display: block">
-
-                <div class="card-body">
-                    <h4 class="card-title">
-                        Appart de ouf
-                    </h4>
-                    <p class="card-text">
-                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Mollitia tempora possimus aliquam. Sunt rerum ipsam, maxime neque voluptatum ducimus corporis quidem tempore nulla.Perferendis sequi repellendus quam possimus quisquam animi atque, esse, laborum ea similique quasi. Necessitatibus doloremque aspernatur dolores nihil eius rerum quidem animi neque?
-                    </p>
-                    <a href="#" class="btn btn-secondary">En savoir plus</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card bg-light mb-3">
-                <div class="card-header text-center">
-                    3 chambres, <strong>49€ / nuit</strong> <br>
-                    <small>Pas encore noté</small>
-                </div>
-
-                <img src="http://placehold.it/1000x400" alt="Img de l'appart" style="height: 200px; width: 100%; display: block">
-
-                <div class="card-body">
-                    <h4 class="card-title">
-                        Appart de ouf
-                    </h4>
-                    <p class="card-text">
-                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Mollitia tempora possimus aliquam. Sunt rerum ipsam, maxime neque voluptatum ducimus corporis quidem tempore nulla.Perferendis sequi repellendus quam possimus quisquam animi atque, esse, laborum ea similique quasi. Necessitatibus doloremque aspernatur dolores nihil eius rerum quidem animi neque?
-                    </p>
-                    <a href="#" class="btn btn-secondary">En savoir plus</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card bg-light mb-3">
-                <div class="card-header text-center">
-                    3 chambres, <strong>49€ / nuit</strong> <br>
-                    <small>Pas encore noté</small>
-                </div>
-
-                <img src="http://placehold.it/1000x400" alt="Img de l'appart" style="height: 200px; width: 100%; display: block">
-
-                <div class="card-body">
-                    <h4 class="card-title">
-                        Appart de ouf
-                    </h4>
-                    <p class="card-text">
-                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Mollitia tempora possimus aliquam. Sunt rerum ipsam, maxime neque voluptatum ducimus corporis quidem tempore nulla.Perferendis sequi repellendus quam possimus quisquam animi atque, esse, laborum ea similique quasi. Necessitatibus doloremque aspernatur dolores nihil eius rerum quidem animi neque?
-                    </p>
-                    <a href="#" class="btn btn-secondary">En savoir plus</a>
-                </div>
-            </div>
-        </div>
+        {% for data in annonces %}
+            {% include "annonce/_annonce.html.twig" with {'annonce': data.annonce} %}
+        {% endfor %}
     </div>
     <h2 class="h1 my-5">Nos propriétaires stars</h2>
     <div class="row">
-        <div class="col">
-            <div class="card border-secondary mb-3">
-                <div class="card-body">
-                    <h4 class="card-title">Yuval Abu</h4>
-                    <hr>
-                    <div class="card-text">
-                        <img src="http://placehold.it/64x64" alt="Avatar de Yuval" class="float-left mr-3">
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum consequuntur fugiat officia.</p>
-                        <a href="#" class="btn btn-success float-right">En savoir plus</a>
+        {% for data in users %}
+            <div class="col">
+                <div class="card border-secondary mb-3">
+                    <div class="card-body">
+                        <h4 class="card-title">{{data.user.fullName}}</h4>
+                        <hr>
+                        <div class="card-text">
+                            <img src="{{data.user.picture}}" alt="Avatar de {{data.user.fullName}}" class="float-left mr-3 avatar avatar-medium">
+                            <p>{{data.user.intro}}</p>
+                            <a href="{{ path('user_show', {'slug': data.user.slug }) }}" class="btn btn-success float-right">En savoir plus</a>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="col">
-            <div class="card border-secondary mb-3">
-                <div class="card-body">
-                    <h4 class="card-title">John Doe</h4>
-                    <hr>
-                    <div class="card-text">
-                        <img src="http://placehold.it/64x64" alt="Avatar de John" class="float-left mr-3">
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum consequuntur fugiat officia.</p>
-                        <a href="#" class="btn btn-success float-right">En savoir plus</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+        {% endfor %}
     </div>
 </div>
 {% endblock %}
