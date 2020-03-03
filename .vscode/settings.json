@@ -4,5 +4,7 @@
     },
     "emmet.includeLanguages": {
         "twig": "html"
-    }    
+    },
+    "symfony-vscode.shellExecutable": "/bin/bash",
+    "symfony-vscode.shellCommand": "docker exec symbnb /bin/sh -c 'cd /var/www/symbnb && php \"$@\"' -- " 
 }
